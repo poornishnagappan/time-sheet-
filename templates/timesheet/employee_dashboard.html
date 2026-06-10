@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Employee Dashboard</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#eef2f7;
+}
+
+.sidebar{
+    width:250px;
+    height:100vh;
+    position:fixed;
+    background:#16233b;
+    color:white;
+}
+
+.sidebar h2{
+    padding:20px;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 20px;
+}
+
+.sidebar a:hover{
+    background:#2b3c5a;
+}
+
+.main{
+    margin-left:250px;
+    padding:30px;
+}
+
+.header{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:25px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+.cards{
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+}
+
+.card{
+    flex:1;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card h3{
+    margin:0;
+    color:#666;
+}
+
+.card h1{
+    color:#2563eb;
+    margin-top:10px;
+}
+
+.btn{
+    background:#2563eb;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.btn:hover{
+    background:#1d4ed8;
+}
+
+.table-box{
+    background:white;
+    margin-top:20px;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#2563eb;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+}
+
+tr:hover{
+    background:#f8fafc;
+}
+
+.pending{
+    color:orange;
+    font-weight:bold;
+}
+
+.approved{
+    color:green;
+    font-weight:bold;
+}
+
+.rejected{
+    color:red;
+    font-weight:bold;
+}
+
+.action-btn{
+    text-decoration:none;
+    padding:5px 10px;
+    border-radius:5px;
+}
+
+.edit-btn{
+    background:#22c55e;
+    color:white;
+}
+
+.delete-btn{
+    background:#ef4444;
+    color:white;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="sidebar">
+
+    <h2>Timesheet</h2>
+
+    <a href="/dashboard/">Dashboard</a>
+    <a href="/add-task/">Add Timesheet</a>
+    <a href="/logout/">Logout</a>
+
+</div>
+
+<div class="main">
+
+    <div class="header">
+        <h1>Employee Timesheet Dashboard</h1>
+        <p>Welcome {{ request.user.username }}</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Hours</h3>
+            <h1>{{ total_hours }}</h1>
+        </div>
+
+        <div class="card">
+            <h3>Total Tasks</h3>
+            <h1>{{ total_tasks }}</h1>
+        </div>
+
+        <div class="card">
+            <h3>Pending Tasks</h3>
+            <h1>{{ pending_tasks }}</h1>
+        </div>
+
+    </div>
+
+    <a href="/add-task/" class="btn">+ Add Timesheet</a>
+
+    <div class="table-box">
+
+<h2>Timesheet Records</h2>
+
+<table>
+<tr>
+    <th>Task Name</th>
+    <th>Description</th>
+    <th>Hours</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+
+{% for task in tasks %}
+<tr>
+    <td>{{ task.task_name }}</td>
+    <td>{{ task.description }}</td>
+    <td>{{ task.hours }}</td>
+    <td>
+        <span class="{{ task.status|lower }}">
+            {{ task.status }}
+        </span>
+    </td>
+    <td>
+        <a href="{% url 'edit_task' task.id %}">
+            Edit
+        </a>
+
+        |
+
+        <a href="{% url 'delete_task' task.id %}">
+            Delete
+        </a>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="5">
+        No tasks available
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

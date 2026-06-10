@@ -1,0 +1,11 @@
+<h2>Edit Task</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <input type="text" name="task" value="{{ task.task_name }}"><br><br>
+    <textarea name="description">{{ task.description }}</textarea><br><br>
+    <input type="number" name="hours" value="{{ task.hours }}"><br><br>
+
+    <button type="submit">Update</button>
+</form>

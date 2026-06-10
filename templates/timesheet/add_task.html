@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Timesheet</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        .task {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            position: relative;
+            border: 1px solid #ddd;
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 6px;
+            font-size: 13px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: none;
+            height: 40px;
+        }
+
+        .small-btn {
+            padding: 6px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .add {
+            background: #28a745;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .save {
+            background: #007bff;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .delete {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+
+            width: 22px;
+            height: 22px;
+
+            background: red;
+            color: white;
+
+            border: none;
+            border-radius: 50%;
+
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .first .delete {
+            display: none;
+        }
+
+        label {
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>➕ Daily Timesheet</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div id="tasks">
+
+            <!-- TASK 1 -->
+            <div class="task first">
+                <button type="button" class="delete" onclick="removeTask(this)">×</button>
+
+                <div class="row">
+                    <div>
+                        <label>Date</label>
+                        <input type="date" name="date" required>
+                    </div>
+
+                    <div>
+                        <label>Hours</label>
+                        <input type="number" name="hours" step="0.1" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Task Name</label>
+                    <input type="text" name="task_name" required>
+                </div>
+
+                <div>
+                    <label>Description</label>
+                    <textarea name="description"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <button type="button" class="small-btn add" onclick="addTask()">➕ Add Task</button>
+        <br>
+
+        <button type="submit" class="small-btn save">💾 Save Timesheet</button>
+
+    </form>
+
+</div>
+
+<script>
+function addTask() {
+    let container = document.getElementById("tasks");
+    let first = container.querySelector(".task");
+
+    let clone = first.cloneNode(true);
+
+    clone.querySelectorAll("input, textarea").forEach(el => el.value = "");
+
+    clone.classList.remove("first");
+
+    container.appendChild(clone);
+}
+
+function removeTask(btn) {
+    let container = document.getElementById("tasks");
+
+    if (container.querySelectorAll(".task").length > 1) {
+        btn.parentElement.remove();
+    }
+}
+</script>
+
+</body>
+</html>
